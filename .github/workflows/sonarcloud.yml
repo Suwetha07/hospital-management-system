@@ -48,7 +48,6 @@ jobs:
 
     
       - name: Install dependencies
-        working-directory: backend
         run: npm install
 
       - name: Install Snyk
