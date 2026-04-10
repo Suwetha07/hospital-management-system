@@ -50,15 +50,21 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
 
-      - name: Setup Snyk
-        uses: snyk/actions/node@master
+      
+             - name: Install dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
       - name: Run Snyk Scan
         id: snyk-test
         continue-on-error: true
-        run: snyk test --all-projects
+        working-directory: backend
+        run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
       
       - name: Notify Slack - Snyk Success
         if: steps.snyk-test.outcome == 'success'
