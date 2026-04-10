@@ -55,7 +55,7 @@ jobs:
       - name: Run Snyk Scan
         id: snyk-test
         continue-on-error: true
-        run: snyk test
+        run: snyk test backend/
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
