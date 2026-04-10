@@ -48,3 +48,34 @@ jobs:
           text: "SonarQube Quality Gate FAILED for ${{ github.repository }}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@v3
+
+      - name: Run Snyk Scan
+        id: snyk-test
+        continue-on-error: true
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      
+      - name: Notify Slack - Snyk Success
+        if: steps.snyk-test.outcome == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: "Snyk scan PASSED for ${{ github.repository }}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      
+      - name: Notify Slack - Snyk Failure
+        if: steps.snyk-test.outcome == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: "Snyk scan FAILED (vulnerabilities found) in ${{ github.repository }}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
