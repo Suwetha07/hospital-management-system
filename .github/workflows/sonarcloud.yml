@@ -52,7 +52,6 @@ jobs:
 
       - name: Setup Snyk
         uses: snyk/actions/setup@v3
-
       - name: Run Snyk Scan
         id: snyk-test
         continue-on-error: true
