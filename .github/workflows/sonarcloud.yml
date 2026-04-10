@@ -16,9 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # =========================
-      # SONARQUBE
-      # =========================
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
@@ -45,13 +42,11 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: failure
-          text: "🚨 SonarQube FAILED for ${{ github.repository }}"
+          text: "SonarQube FAILED for ${{ github.repository }}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      # =========================
-      # SNYK
-      # =========================
+    
       - name: Install dependencies
         working-directory: backend
         run: npm install
@@ -62,7 +57,7 @@ jobs:
       - name: Run Snyk Scan
         id: snyk-test
         continue-on-error: true
-        working-directory: backend
+    
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
